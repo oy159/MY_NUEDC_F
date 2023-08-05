@@ -1,0 +1,79 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.36.0.0
+Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 8618720920978, 2, LIC=14HV2-9C5QH-DY0V3-AZJVT-K8DH5-B2FTQ
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.36.0.0
+Toolchain Path:  F:\Program_Files\KEIL5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.36.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.9.0
+Dialog DLL:      TCM.DLL V1.53.0.0
+ 
+<h2>Project:</h2>
+F:\Program_Data\STM32F767_Projects\AD7606C\MDK-ARM\AD7606C.uvprojx
+Project File Date:  08/04/2023
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'F:\Program_Files\KEIL5\ARM\ARMCC\Bin'
+Build target 'AD7606C'
+compiling main.c...
+..\USER\Inc\diagram1.h(315): warning:  #1-D: last line of file ends without a newline
+  	
+..\HARDWARE\W25Q256\W25Q256.h(47): warning:  #1-D: last line of file ends without a newline
+  #endif //TSMS_W25Q256_H
+../Core/Src/main.c(535): warning:  #940-D: missing return statement at end of non-void function "OY_FindMaxMin" 
+  }
+../Core/Src/main.c(604): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  						AD_AVEM4[i][j] += AD_Vpp[i][j]/5.;
+../Core/Src/main.c(695): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  						AD_AVEM4[i][j] += AD_Vpp[i][j]/5.;
+../Core/Src/main.c(1100): warning:  #188-D: enumerated type mixed with another type
+  	oystate = 100;
+../Core/Src/main.c: 6 warnings, 0 errors
+linking...
+Program Size: Code=46772 RO-data=68740 RW-data=148 ZI-data=259572  
+FromELF: creating hex file...
+"AD7606C\AD7606C.axf" - 0 Error(s), 6 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.4.0.pack
+                ARM.CMSIS.5.4.0
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.1.2
+   * Component: DSP Version: 1.5.2
+
+Package Vendor: Keil
+                https://www.keil.com/pack/Keil.STM32F7xx_DFP.2.15.1.pack
+                Keil.STM32F7xx_DFP.2.15.1
+                STMicroelectronics STM32F7 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_AD7606C
+  F:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Core\Include
+  F:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include
+  F:\Program_Files\KEIL5\Keil\STM32F7xx_DFP\2.15.1\Drivers\CMSIS\Device\ST\STM32F7xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.1.2
+
+   * Component: ARM::CMSIS:DSP:1.5.2
+      Include file:  CMSIS\DSP\Include\arm_math.h
+      Library file:  CMSIS\Lib\ARM\arm_cortexM7lfdp_math.lib
+Build Time Elapsed:  00:00:03
+</pre>
+</body>
+</html>
