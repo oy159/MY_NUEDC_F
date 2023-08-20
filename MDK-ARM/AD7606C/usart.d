@@ -38,3 +38,4 @@ ad7606c\usart.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h
 ad7606c\usart.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h
 ad7606c\usart.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h
 ad7606c\usart.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h
+ad7606c\usart.o: F:\Program_Files\KEIL5\ARM\ARMCC\Bin\..\include\stdio.h

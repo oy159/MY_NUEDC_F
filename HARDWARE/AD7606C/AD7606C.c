@@ -5,6 +5,20 @@ uint8_t	sampflag;
 uint16_t *p=(uint16_t *)AD7606C_ADDR;
 uint8_t AD7606C_flag = 0;     //  AD采集完成标志
 
+/*		ADC DATA		*/
+/* ************************************ */
+
+uint16_t	data[8*AD7606C_SAMP_SIZE];
+float	volt[4][AD7606C_SAMP_SIZE];
+
+uint16_t	DataNeg[32*AD7606C_SAMP_SIZE];
+float VoltNeg[4][4*AD7606C_SAMP_SIZE];
+
+/* ************************************ */
+/* ************************************ */
+
+
+
 
 uint16_t AD7606C_Init(uint16_t* P, uint16_t Range, uint16_t Bandwidth, uint16_t OverSamp)
 {

@@ -41,6 +41,11 @@ typedef enum {
 	TSMS_FAIL = 4 // a failed operation
 } TSMS_RESULT;
 
+#define	POSOFFSET	4*39
+
+
+
+
 #define	bool	uint8_t
 #define	true	1U
 #define	false	0
@@ -51,12 +56,26 @@ typedef enum {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+#define 	KEY1	(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9))
+#define 	KEY2	(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5))
+#define 	KEY3	(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_12))
+#define 	KEY4	(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11))
+#define 	KEY5	(HAL_GPIO_ReadPin(GPIOH, GPIO_PIN_11))
+
+
+#define		LED1(n)	(n?HAL_GPIO_WritePin(GPIOH,GPIO_PIN_14,GPIO_PIN_SET):HAL_GPIO_WritePin(GPIOH,GPIO_PIN_14,GPIO_PIN_RESET)) 
+#define		LED2(n)	(n?HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,GPIO_PIN_SET):HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,GPIO_PIN_RESET)) 
+#define		LED3(n)	(n?HAL_GPIO_WritePin(GPIOH,GPIO_PIN_9,GPIO_PIN_SET):HAL_GPIO_WritePin(GPIOH,GPIO_PIN_9,GPIO_PIN_RESET)) 
+#define		LED4(n)	(n?HAL_GPIO_WritePin(GPIOH,GPIO_PIN_10,GPIO_PIN_SET):HAL_GPIO_WritePin(GPIOH,GPIO_PIN_10,GPIO_PIN_RESET)) 
+
+
+#define		CTRLCH4(n)	(n?HAL_GPIO_WritePin(GPIOc,GPIO_PIN_7,GPIO_PIN_SET):HAL_GPIO_WritePin(GPIOC,GPIO_PIN_7,GPIO_PIN_RESET)) 
 
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+extern struct W25Q256_Handler *qspi_handler;
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/

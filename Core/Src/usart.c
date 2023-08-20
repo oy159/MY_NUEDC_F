@@ -239,6 +239,53 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+
+
+int fputc(int ch, FILE *f)
+{
+		HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xffff);
+  return ch;
+}
+int fgetc(FILE *f)
+{
+  uint8_t ch = 0;
+	HAL_UART_Receive(&huart1, &ch, 1, 0xffff);
+  return ch;
+}
+
+void HMISends(uint8_t *buf1)		  
+{
+	uint8_t i=0;
+	while(1)
+	{
+		if(buf1[i]!=0)
+	 	{
+			HAL_UART_Transmit(&huart2,&buf1[i],1,1000); 
+			while((__HAL_UART_GET_FLAG(&huart2,UART_FLAG_TXE)==RESET)){};
+		 	i++;
+		}
+		else 
+			return ;
+		}
+	}
+void HMISend(uint8_t k)           
+{   
+	uint8_t i;
+	for(i=0;i<3;i++)
+	{
+		if(k!=0)
+		{  
+			HAL_UART_Transmit(&huart2,&k,1,1000);
+			while((__HAL_UART_GET_FLAG(&huart2,UART_FLAG_TXE)==RESET)){};                
+		}
+		else
+			return ;				
+	}
+}
+
+
+
+
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance==USART2)//如果是串口1

@@ -31,72 +31,21 @@
 #include  "User_function.h"
 #include	"AD7606C.h"
 #include	"ad9959.h"
-#include  "stdio.h"
+//#include  "stdio.h"
 #include 	"fft_user.h"
 #include	"correlation.h"
-#include	"diagram1.h"
+//#include	"diagram1.h"
 #include "W9825G6KH.h"
 #include "W25Q256.h"
 #include	"stdlib.h"
 #include	"Appuser.h"
 
 
-//#include	"arm_struct.h"
-//#include	"arm_math.h"
-
-
 
 uint8_t		uartuse = 1;
 
 
-int fputc(int ch, FILE *f)
-{
-	if(uartuse)
-		HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xffff);
-	else
-		HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xffff);
-  return ch;
-}
-int fgetc(FILE *f)
-{
-  uint8_t ch = 0;
-	if(uartuse)
-		HAL_UART_Receive(&huart1, &ch, 1, 0xffff);
-	else
-		HAL_UART_Receive(&huart2, &ch, 1, 0xffff);
-  return ch;
-}
 
-void HMISends(uint8_t *buf1)		  
-{
-	uint8_t i=0;
-	while(1)
-	{
-	 if(buf1[i]!=0)
-	 	{
-			HAL_UART_Transmit(&huart2,&buf1[i],1,1000); 
-			while((__HAL_UART_GET_FLAG(&huart2,UART_FLAG_TXE)==RESET)){};
-		 	i++;
-		}
-	 else 
-	 return ;
-
-		}
-	}
-void HMISend(uint8_t k)           
-{   
-    uint8_t i;
-    for(i=0;i<3;i++)
-    {
-        if(k!=0)
-        {  
-       HAL_UART_Transmit(&huart2,&k,1,1000);
-       while((__HAL_UART_GET_FLAG(&huart2,UART_FLAG_TXE)==RESET)){};                
-        }
-		else
-	  return ;				
-    }
-}
 
 
 /* USER CODE END Includes */
@@ -108,7 +57,7 @@ void HMISend(uint8_t k)
 #define FREQTERM  20000U
 #define AVENUM  10
 #define	XCORRSIZE	4*511
-#define	POSOFFSET	4*39
+
 
 
 #define	Pos_Start_ADDRESS	1024*1024 + 2000
@@ -125,14 +74,12 @@ typedef	enum
 
 
 
-extern	DMA_HandleTypeDef hdma_tim4_up;;
-
-
-//uint16_t *p=(uint16_t *)AD7606C_ADDR;
-
+extern	DMA_HandleTypeDef hdma_tim4_up;
 struct W25Q256_Handler *qspi_handler;
-
 uint32_t*	pp= (uint32_t *)0xc0000000;
+
+
+
 uint8_t buf1[100];
 uint8_t SAMP_DIV = 1;
 uint8_t re;
@@ -147,8 +94,6 @@ uint16_t	Pos_Storage_Num = 0;
 
 uint8_t Knock_flag = 0;
 uint8_t dds_stopflag = 0;
-//uint8_t AD7606C_flag = 0;     //  AD采集完成标志
-//uint8_t sampflag = 0;         //  单次采集过程标志
 uint8_t 	pr_flag[4] = {0};     //  信号检测
 uint16_t  	loc[4];
 uint16_t	chf;
@@ -156,16 +101,14 @@ uint16_t	chf;
 uint8_t  	set_rand = 0;  //rand 
 
 uint16_t 	AD7606C_ID=0;
-uint16_t	data[8*AD7606C_SAMP_SIZE];
-uint16_t	data_mode2[32*AD7606C_SAMP_SIZE];
-float volt_mode2[4][4*AD7606C_SAMP_SIZE];
+
 
 uint16_t	start;
 uint16_t	stop;
 int cnt = 0;
 int	cnt_ave = 0;
 float percent[3] = {0,0,0};
-float volt[4][AD7606C_SAMP_SIZE];
+
 float AD_Vpp[4][100];
 
 float	AD_Vpp_All[300];
@@ -175,13 +118,11 @@ float	Neg_res[36];
 float AD_Max[4][100];
 float AD_Min[4][100];
 
-float	AD_AVE[4][39];
+//float	AD_AVE[4][39];
 
 float	AD_AVEM4[4][39] ;
 float AD_AVEM4_Load[4][100];
 float	Mode4_Res[625];
-
-float Norm_Mode2[144];
 
 float xcorr_out[4][AD7606C_SAMP_SIZE*2 - 1];
 float xcorr_out_test[4][AD7606C_SAMP_SIZE*2 - 1];
@@ -209,311 +150,39 @@ System_State oystate;
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-	
-	
-	
-	
-	
-	
-	
-	
-// void	AD7606C_MEASURE(void)
-// {
-//   sampflag = 0;
-//   HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_1);
-//   HAL_TIM_Base_Start(&htim4);
-//   while(1)
-//   {
-//     while(sampflag != 1){};
-//     if(sampflag == 1)
-//     {
-//       if(cnt != AD7606C_SAMP_SIZE/SAMP_DIV)
-//       {
-//         data[8*cnt] = *p;
-//         data[1+8*cnt] = *p;
-//         data[2+8*cnt] = *p;
-//         data[3+8*cnt] = *p;
-//         data[4+8*cnt] = *p;
-//         data[5+8*cnt] = *p;
-//         data[6+8*cnt] = *p;
-//         data[7+8*cnt] = *p;
-//         cnt++;
-//       }else{
-//         cnt = 0;
-//         AD7606C_flag = 1;
-//         HAL_TIM_Base_Stop(&htim4);
-//         HAL_TIM_PWM_Stop(&htim4,TIM_CHANNEL_1);
-//         break;
-//       }
-//       sampflag = 0;
-//     }
-//   }
-// }
-
-void	AD7606C_MEASURE_Mode2(void)
-{
-  sampflag = 0;
-  HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_1);
-  HAL_TIM_Base_Start(&htim4);
-  while(1)
-  {
-    while(sampflag != 1){};
-    if(sampflag == 1)
-    {
-      if(cnt != AD7606C_SAMP_SIZE/SAMP_DIV * 4)
-      {
-        data_mode2[8*cnt] = *p;
-        data_mode2[1+8*cnt] = *p;
-        data_mode2[2+8*cnt] = *p;
-        data_mode2[3+8*cnt] = *p;
-        data_mode2[4+8*cnt] = *p;
-        data_mode2[5+8*cnt] = *p;
-        data_mode2[6+8*cnt] = *p;
-        data_mode2[7+8*cnt] = *p;
-        cnt++;
-      }else{
-        cnt = 0;
-        AD7606C_flag = 1;
-        HAL_TIM_Base_Stop(&htim4);
-        HAL_TIM_PWM_Stop(&htim4,TIM_CHANNEL_1);
-        break;
-      }
-      sampflag = 0;
-    }
-  }
-}
-
-
-//void	ADC_BitToFloat(void)
-//{
-//	for(int i = 0;i<4;i++)
-//	{
-//		for(int j = 0 ;j<AD7606C_SAMP_SIZE/SAMP_DIV; j++)
-//		{
-//			if(data[j*8+i]>=32768)
-//				volt[i][j] = (float)data[j*8+i]/65535*20-20;
-//			else
-//				volt[i][j] = (float)data[j*8+i]/65535*20;	
-//		}
-//	}
-//}
-
-void	ADC_BitToFloat_Mode2(void)
-{
-	for(int i = 0;i<4;i++)
-	{
-		for(int j = 0 ;j<4 * AD7606C_SAMP_SIZE/SAMP_DIV; j++)
-		{
-			if(data_mode2[j*8+i]>=32768)
-				volt_mode2[i][j] = (float)data_mode2[j*8+i]/65535*20-20;
-			else
-				volt_mode2[i][j] = (float)data_mode2[j*8+i]/65535*20;	
-		}
-	}
-}
-
 
 void  VoltJudge(void)
 {
 
-		for(uint16_t i = 0;i < 4; i++){
-			loc[i] = 0;pr_flag[i] = 0;
-			for (uint16_t j = 0; j < AD7606C_SAMP_SIZE/SAMP_DIV * 4; j++)
+	for(uint16_t i = 0;i < 4; i++){
+		loc[i] = 0;pr_flag[i] = 0;
+		for (uint16_t j = 0; j < AD7606C_SAMP_SIZE/SAMP_DIV * 4; j++)
+		{
+			if(DataNeg[8*j + i] > THREVOLT && DataNeg[8*j + i] < 0x8000)
 			{
-					if(data_mode2[8*j + i] > THREVOLT && data_mode2[8*j + i] < 0x8000)
-					{
-						pr_flag[i] = 1;
-						loc[i] = j;
-						break;
-					}
+				pr_flag[i] = 1;
+				loc[i] = j;
+				break;
 			}
 		}
-		if(loc[0]<=loc[1]&&loc[0]<=loc[2]&&loc[0]<=loc[3])
-		{
-				start = loc[0];
-				chf = 1;
-		}else if(loc[1]<=loc[0]&&loc[1]<=loc[2]&&loc[1]<=loc[3])
-		{
-				start = loc[1];
-				chf = 2;
-		}else if(loc[2]<=loc[0]&&loc[2]<=loc[1]&&loc[2]<=loc[3])
-		{
-				start = loc[2];
-				chf = 3;
-		}else if(loc[3]<=loc[0]&&loc[3]<=loc[1]&&loc[3]<=loc[2])
-		{
-				start = loc[3];
-				chf = 4;
-		}
-		
-		if(start > AD7606C_SAMP_SIZE/SAMP_DIV*4 - 256)
-		{
-				start = AD7606C_SAMP_SIZE/SAMP_DIV*4 - 256;
-				stop = AD7606C_SAMP_SIZE/SAMP_DIV*4 - 1;
-		}else
-		{
-				start = start	;
-				stop = start + 255 ;
-		}
-		
-    if(start > 100&&pr_flag[0] == 1)
-    {
-        Knock_flag = 1;
-    }
-}
-
-
-void	NormMode2(float	*input1)
-{
-	for(int i = 0;i	< 144; i++)
-		Norm_Mode2[i] = 0;
+	}
 	
-	for(int i = 0; i < 117; i++){
-Norm_Mode2[0] += ((a01_CH1[i]*1000000000 - input1[i]*1000000000))*((a01_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[1] += ((a02_CH1[i]*1000000000 - input1[i]*1000000000))*((a02_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[2] += ((a03_CH1[i]*1000000000 - input1[i]*1000000000))*((a03_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[3] += ((a04_CH1[i]*1000000000 - input1[i]*1000000000))*((a04_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[4] += ((a05_CH1[i]*1000000000 - input1[i]*1000000000))*((a05_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[5] += ((a06_CH1[i]*1000000000 - input1[i]*1000000000))*((a06_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[6] += ((a07_CH1[i]*1000000000 - input1[i]*1000000000))*((a07_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[7] += ((a08_CH1[i]*1000000000 - input1[i]*1000000000))*((a08_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[8] += ((a09_CH1[i]*1000000000 - input1[i]*1000000000))*((a09_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[9] += ((a10_CH1[i]*1000000000 - input1[i]*1000000000))*((a10_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[10] += ((a11_CH1[i]*1000000000 - input1[i]*1000000000))*((a11_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[11] += ((a12_CH1[i]*1000000000 - input1[i]*1000000000))*((a12_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[12] += ((b01_CH1[i]*1000000000 - input1[i]*1000000000))*((b01_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[13] += ((b02_CH1[i]*1000000000 - input1[i]*1000000000))*((b02_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[14] += ((b03_CH1[i]*1000000000 - input1[i]*1000000000))*((b03_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[15] += ((b04_CH1[i]*1000000000 - input1[i]*1000000000))*((b04_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[16] += ((b05_CH1[i]*1000000000 - input1[i]*1000000000))*((b05_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[17] += ((b06_CH1[i]*1000000000 - input1[i]*1000000000))*((b06_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[18] += ((b07_CH1[i]*1000000000 - input1[i]*1000000000))*((b07_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[19] += ((b08_CH1[i]*1000000000 - input1[i]*1000000000))*((b08_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[20] += ((b09_CH1[i]*1000000000 - input1[i]*1000000000))*((b09_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[21] += ((b10_CH1[i]*1000000000 - input1[i]*1000000000))*((b10_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[22] += ((b11_CH1[i]*1000000000 - input1[i]*1000000000))*((b11_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[23] += ((b12_CH1[i]*1000000000 - input1[i]*1000000000))*((b12_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[24] += ((c01_CH1[i]*1000000000 - input1[i]*1000000000))*((c01_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[25] += ((c02_CH1[i]*1000000000 - input1[i]*1000000000))*((c02_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[26] += ((c03_CH1[i]*1000000000 - input1[i]*1000000000))*((c03_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[27] += ((c04_CH1[i]*1000000000 - input1[i]*1000000000))*((c04_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[28] += ((c05_CH1[i]*1000000000 - input1[i]*1000000000))*((c05_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[29] += ((c06_CH1[i]*1000000000 - input1[i]*1000000000))*((c06_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[30] += ((c07_CH1[i]*1000000000 - input1[i]*1000000000))*((c07_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[31] += ((c08_CH1[i]*1000000000 - input1[i]*1000000000))*((c08_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[32] += ((c09_CH1[i]*1000000000 - input1[i]*1000000000))*((c09_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[33] += ((c10_CH1[i]*1000000000 - input1[i]*1000000000))*((c10_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[34] += ((c11_CH1[i]*1000000000 - input1[i]*1000000000))*((c11_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[35] += ((c12_CH1[i]*1000000000 - input1[i]*1000000000))*((c12_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[36] += ((d01_CH1[i]*1000000000 - input1[i]*1000000000))*((d01_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[37] += ((d02_CH1[i]*1000000000 - input1[i]*1000000000))*((d02_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[38] += ((d03_CH1[i]*1000000000 - input1[i]*1000000000))*((d03_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[39] += ((d04_CH1[i]*1000000000 - input1[i]*1000000000))*((d04_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[40] += ((d05_CH1[i]*1000000000 - input1[i]*1000000000))*((d05_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[41] += ((d06_CH1[i]*1000000000 - input1[i]*1000000000))*((d06_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[42] += ((d07_CH1[i]*1000000000 - input1[i]*1000000000))*((d07_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[43] += ((d08_CH1[i]*1000000000 - input1[i]*1000000000))*((d08_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[44] += ((d09_CH1[i]*1000000000 - input1[i]*1000000000))*((d09_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[45] += ((d10_CH1[i]*1000000000 - input1[i]*1000000000))*((d10_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[46] += ((d11_CH1[i]*1000000000 - input1[i]*1000000000))*((d11_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[47] += ((d12_CH1[i]*1000000000 - input1[i]*1000000000))*((d12_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[48] += ((e01_CH1[i]*1000000000 - input1[i]*1000000000))*((e01_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[49] += ((e02_CH1[i]*1000000000 - input1[i]*1000000000))*((e02_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[50] += ((e03_CH1[i]*1000000000 - input1[i]*1000000000))*((e03_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[51] += ((e04_CH1[i]*1000000000 - input1[i]*1000000000))*((e04_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[52] += ((e05_CH1[i]*1000000000 - input1[i]*1000000000))*((e05_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[53] += ((e06_CH1[i]*1000000000 - input1[i]*1000000000))*((e06_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[54] += ((e07_CH1[i]*1000000000 - input1[i]*1000000000))*((e07_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[55] += ((e08_CH1[i]*1000000000 - input1[i]*1000000000))*((e08_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[56] += ((e09_CH1[i]*1000000000 - input1[i]*1000000000))*((e09_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[57] += ((e10_CH1[i]*1000000000 - input1[i]*1000000000))*((e10_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[58] += ((e11_CH1[i]*1000000000 - input1[i]*1000000000))*((e11_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[59] += ((e12_CH1[i]*1000000000 - input1[i]*1000000000))*((e12_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[60] += ((f01_CH1[i]*1000000000 - input1[i]*1000000000))*((f01_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[61] += ((f02_CH1[i]*1000000000 - input1[i]*1000000000))*((f02_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[62] += ((f03_CH1[i]*1000000000 - input1[i]*1000000000))*((f03_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[63] += ((f04_CH1[i]*1000000000 - input1[i]*1000000000))*((f04_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[64] += ((f05_CH1[i]*1000000000 - input1[i]*1000000000))*((f05_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[65] += ((f06_CH1[i]*1000000000 - input1[i]*1000000000))*((f06_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[66] += ((f07_CH1[i]*1000000000 - input1[i]*1000000000))*((f07_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[67] += ((f08_CH1[i]*1000000000 - input1[i]*1000000000))*((f08_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[68] += ((f09_CH1[i]*1000000000 - input1[i]*1000000000))*((f09_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[69] += ((f10_CH1[i]*1000000000 - input1[i]*1000000000))*((f10_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[70] += ((f11_CH1[i]*1000000000 - input1[i]*1000000000))*((f11_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[71] += ((f12_CH1[i]*1000000000 - input1[i]*1000000000))*((f12_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[72] += ((g01_CH1[i]*1000000000 - input1[i]*1000000000))*((g01_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[73] += ((g02_CH1[i]*1000000000 - input1[i]*1000000000))*((g02_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[74] += ((g03_CH1[i]*1000000000 - input1[i]*1000000000))*((g03_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[75] += ((g04_CH1[i]*1000000000 - input1[i]*1000000000))*((g04_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[76] += ((g05_CH1[i]*1000000000 - input1[i]*1000000000))*((g05_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[77] += ((g06_CH1[i]*1000000000 - input1[i]*1000000000))*((g06_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[78] += ((g07_CH1[i]*1000000000 - input1[i]*1000000000))*((g07_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[79] += ((g08_CH1[i]*1000000000 - input1[i]*1000000000))*((g08_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[80] += ((g09_CH1[i]*1000000000 - input1[i]*1000000000))*((g09_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[81] += ((g10_CH1[i]*1000000000 - input1[i]*1000000000))*((g10_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[82] += ((g11_CH1[i]*1000000000 - input1[i]*1000000000))*((g11_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[83] += ((g12_CH1[i]*1000000000 - input1[i]*1000000000))*((g12_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[84] += ((h01_CH1[i]*1000000000 - input1[i]*1000000000))*((h01_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[85] += ((h02_CH1[i]*1000000000 - input1[i]*1000000000))*((h02_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[86] += ((h03_CH1[i]*1000000000 - input1[i]*1000000000))*((h03_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[87] += ((h04_CH1[i]*1000000000 - input1[i]*1000000000))*((h04_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[88] += ((h05_CH1[i]*1000000000 - input1[i]*1000000000))*((h05_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[89] += ((h06_CH1[i]*1000000000 - input1[i]*1000000000))*((h06_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[90] += ((h07_CH1[i]*1000000000 - input1[i]*1000000000))*((h07_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[91] += ((h08_CH1[i]*1000000000 - input1[i]*1000000000))*((h08_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[92] += ((h09_CH1[i]*1000000000 - input1[i]*1000000000))*((h09_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[93] += ((h10_CH1[i]*1000000000 - input1[i]*1000000000))*((h10_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[94] += ((h11_CH1[i]*1000000000 - input1[i]*1000000000))*((h11_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[95] += ((h12_CH1[i]*1000000000 - input1[i]*1000000000))*((h12_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[96] += ((i01_CH1[i]*1000000000 - input1[i]*1000000000))*((i01_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[97] += ((i02_CH1[i]*1000000000 - input1[i]*1000000000))*((i02_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[98] += ((i03_CH1[i]*1000000000 - input1[i]*1000000000))*((i03_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[99] += ((i04_CH1[i]*1000000000 - input1[i]*1000000000))*((i04_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[100] += ((i05_CH1[i]*1000000000 - input1[i]*1000000000))*((i05_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[101] += ((i06_CH1[i]*1000000000 - input1[i]*1000000000))*((i06_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[102] += ((i07_CH1[i]*1000000000 - input1[i]*1000000000))*((i07_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[103] += ((i08_CH1[i]*1000000000 - input1[i]*1000000000))*((i08_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[104] += ((i09_CH1[i]*1000000000 - input1[i]*1000000000))*((i09_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[105] += ((i10_CH1[i]*1000000000 - input1[i]*1000000000))*((i10_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[106] += ((i11_CH1[i]*1000000000 - input1[i]*1000000000))*((i11_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[107] += ((i12_CH1[i]*1000000000 - input1[i]*1000000000))*((i12_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[108] += ((j01_CH1[i]*1000000000 - input1[i]*1000000000))*((j01_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[109] += ((j02_CH1[i]*1000000000 - input1[i]*1000000000))*((j02_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[110] += ((j03_CH1[i]*1000000000 - input1[i]*1000000000))*((j03_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[111] += ((j04_CH1[i]*1000000000 - input1[i]*1000000000))*((j04_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[112] += ((j05_CH1[i]*1000000000 - input1[i]*1000000000))*((j05_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[113] += ((j06_CH1[i]*1000000000 - input1[i]*1000000000))*((j06_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[114] += ((j07_CH1[i]*1000000000 - input1[i]*1000000000))*((j07_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[115] += ((j08_CH1[i]*1000000000 - input1[i]*1000000000))*((j08_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[116] += ((j09_CH1[i]*1000000000 - input1[i]*1000000000))*((j09_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[117] += ((j10_CH1[i]*1000000000 - input1[i]*1000000000))*((j10_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[118] += ((j11_CH1[i]*1000000000 - input1[i]*1000000000))*((j11_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[119] += ((j12_CH1[i]*1000000000 - input1[i]*1000000000))*((j12_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[120] += ((k01_CH1[i]*1000000000 - input1[i]*1000000000))*((k01_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[121] += ((k02_CH1[i]*1000000000 - input1[i]*1000000000))*((k02_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[122] += ((k03_CH1[i]*1000000000 - input1[i]*1000000000))*((k03_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[123] += ((k04_CH1[i]*1000000000 - input1[i]*1000000000))*((k04_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[124] += ((k05_CH1[i]*1000000000 - input1[i]*1000000000))*((k05_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[125] += ((k06_CH1[i]*1000000000 - input1[i]*1000000000))*((k06_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[126] += ((k07_CH1[i]*1000000000 - input1[i]*1000000000))*((k07_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[127] += ((k08_CH1[i]*1000000000 - input1[i]*1000000000))*((k08_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[128] += ((k09_CH1[i]*1000000000 - input1[i]*1000000000))*((k09_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[129] += ((k10_CH1[i]*1000000000 - input1[i]*1000000000))*((k10_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[130] += ((k11_CH1[i]*1000000000 - input1[i]*1000000000))*((k11_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[131] += ((k12_CH1[i]*1000000000 - input1[i]*1000000000))*((k12_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[132] += ((l01_CH1[i]*1000000000 - input1[i]*1000000000))*((l01_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[133] += ((l02_CH1[i]*1000000000 - input1[i]*1000000000))*((l02_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[134] += ((l03_CH1[i]*1000000000 - input1[i]*1000000000))*((l03_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[135] += ((l04_CH1[i]*1000000000 - input1[i]*1000000000))*((l04_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[136] += ((l05_CH1[i]*1000000000 - input1[i]*1000000000))*((l05_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[137] += ((l06_CH1[i]*1000000000 - input1[i]*1000000000))*((l06_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[138] += ((l07_CH1[i]*1000000000 - input1[i]*1000000000))*((l07_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[139] += ((l08_CH1[i]*1000000000 - input1[i]*1000000000))*((l08_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[140] += ((l09_CH1[i]*1000000000 - input1[i]*1000000000))*((l09_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[141] += ((l10_CH1[i]*1000000000 - input1[i]*1000000000))*((l10_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[142] += ((l11_CH1[i]*1000000000 - input1[i]*1000000000))*((l11_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-Norm_Mode2[143] += ((l12_CH1[i]*1000000000 - input1[i]*1000000000))*((l12_CH1[i]*1000000000 - input1[i]*1000000000)) ;
-		}
+	start = loc[OY_FindMin_u16(loc,4)];
+	
+	if(start > AD7606C_SAMP_SIZE*4 - 256)
+	{
+		start = AD7606C_SAMP_SIZE*4 - 256;
+		stop = start + 255;
+	}else
+	{
+		start = start	;
+		stop = start + 255;
+	}
+	
+	if(start > 100&&pr_flag[0] == 1)
+	{
+			Knock_flag = 1;
+	}
 }
 
 
@@ -553,93 +222,98 @@ void Pos_Storage_Init(void)
 
 
 
+//void Pos_Storage(void)
+//{
+//		float *vp[4];
+//		for(int k = 0;k<3;k++){
+//			vp[k] = volt[k];
+//			for (uint16_t i = 0; i < 39; i++)
+//			{
+//				AD_AVEM4[k][i] = 0;
+//			}
+//		}
+//		
+//		for(int k = 0;k < 5; k++){
+//			freq = 4800;
+//			for (uint16_t i = 0; i < 39; i++)
+//			{
+//				ad9959_write_frequency(AD9959_CHANNEL_2,freq);
+//				ad9959_io_update();
+//				HAL_Delay(10);
+//				AD7606C_SAMP_Start(data,AD7606C_SAMP_SIZE);
+//				AD7606C_BitToFloat(data,vp,AD7606C_SAMP_SIZE);
+//				OY_FindMaxMin(volt[0],AD7606C_SAMP_SIZE,&AD_Max[0][i],&AD_Min[0][i],&AD_Vpp[0][i],row);
+//				OY_FindMaxMin(volt[1],AD7606C_SAMP_SIZE,&AD_Max[1][i],&AD_Min[1][i],&AD_Vpp[1][i],row);
+//				OY_FindMaxMin(volt[2],AD7606C_SAMP_SIZE,&AD_Max[2][i],&AD_Min[2][i],&AD_Vpp[2][i],row);
+//				//OY_FindMaxMin(volt[3],AD7606C_SAMP_SIZE,&AD_Max[3][i],&AD_Min[3][i],&AD_Vpp[3][i],row);
+//				if(freq == FREQTERM){
+//						freq = 4800;
+//						dds_stopflag = 1;
+//				}else{
+//						freq = freq + 400;
+//				}
+//			}
+//			for (uint16_t i = 0; i < 3; i++){
+//				for(int j = 0;j < 39;j++)
+//				{
+//						AD_AVEM4[i][j] += AD_Vpp[i][j]/5.f;
+//				}
+//			}
+//		}
+//		
+//		uartuse = 1;
+//		for(int i = 0; i < 39;i++)
+//			printf("%f,%f,%f\n",AD_AVEM4[0][i],AD_AVEM4[1][i],AD_AVEM4[2][i]);
+//		if(oystate == POS_Storage_STATE)
+//		{
+//				while(sapa == 4){
+//						if(HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_6) == GPIO_PIN_RESET)
+//							sapa = 2;
+
+//						if(HAL_GPIO_ReadPin(GPIOH,GPIO_PIN_11) == GPIO_PIN_RESET)
+//							sapa = 3;
+//				};
+//				if(sapa == 2){
+//					find_address = start_address;
+//					for(int i = 0;i < 3;i++)
+//					{
+//							W25Q256_write(qspi_handler,start_address,(uint8_t *)AD_AVEM4[i],POSOFFSET);
+//							start_address = start_address + POSOFFSET;// 1024*1024+2000+39*4*3*25
+//					}
+//					sprintf((char*)buf1,"t0.txt=\"save succesfully\"");
+//					HMISends(buf1);
+//					HMISend(0xff);
+//					Pos_Storage_Num++;
+//					sprintf((char*)buf1,"t1.txt=\"has saved %d dots Address: %d\"",Pos_Storage_Num,start_address);
+//					HMISends(buf1);
+//					HMISend(0xff);
+//					
+//					for(int i = 0;i < 3;i++)
+//					{
+//							W25Q256_read(qspi_handler,find_address,(uint8_t *)AD_AVEM4_Load[i],POSOFFSET);
+//							find_address += POSOFFSET;
+//					}
+//					for (uint16_t j = 0; j < 39; j++)
+//					{
+//						printf("%f,%f,%f\n",AD_AVEM4_Load[0][j],AD_AVEM4_Load[1][j],AD_AVEM4_Load[2][j]);		
+//					}
+//					sapa = 4;
+//				}
+//				else if(sapa == 3){
+//						sprintf((char*)buf1,"t0.txt=\"Skip Suceessfully\"");
+//						HMISends(buf1);
+//						HMISend(0xff);
+//						sapa = 4;
+//			}
+//		}
+//}
+
 void Pos_Storage(void)
 {
-		float *vp[4];
-		for(int k = 0;k<3;k++){
-			vp[k] = volt[k];
-			for (uint16_t i = 0; i < 39; i++)
-			{
-				AD_AVEM4[k][i] = 0;
-			}
-		}
-		
-		for(int k = 0;k < 5; k++){
-			freq = 4800;
-			for (uint16_t i = 0; i < 39; i++)
-			{
-				ad9959_write_frequency(AD9959_CHANNEL_2,freq);
-				ad9959_io_update();
-				HAL_Delay(10);
-				AD7606C_SAMP_Start(data,AD7606C_SAMP_SIZE);
-				AD7606C_BitToFloat(data,vp,AD7606C_SAMP_SIZE);
-				OY_FindMaxMin(volt[0],AD7606C_SAMP_SIZE,&AD_Max[0][i],&AD_Min[0][i],&AD_Vpp[0][i],row);
-				OY_FindMaxMin(volt[1],AD7606C_SAMP_SIZE,&AD_Max[1][i],&AD_Min[1][i],&AD_Vpp[1][i],row);
-				OY_FindMaxMin(volt[2],AD7606C_SAMP_SIZE,&AD_Max[2][i],&AD_Min[2][i],&AD_Vpp[2][i],row);
-				//OY_FindMaxMin(volt[3],AD7606C_SAMP_SIZE,&AD_Max[3][i],&AD_Min[3][i],&AD_Vpp[3][i],row);
-				if(freq == FREQTERM){
-						freq = 4800;
-						dds_stopflag = 1;
-				}else{
-						freq = freq + 400;
-				}
-			}
-			for (uint16_t i = 0; i < 3; i++){
-				for(int j = 0;j < 39;j++)
-				{
-						AD_AVEM4[i][j] += AD_Vpp[i][j]/5.;
-				}
-			}
-		}
-		
-		uartuse = 1;
-		for(int i = 0; i < 39;i++)
-			printf("%f,%f,%f\n",AD_AVEM4[0][i],AD_AVEM4[1][i],AD_AVEM4[2][i]);
-		if(oystate == POS_Storage_STATE)
-		{
-				while(sapa == 4){
-						if(HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_6) == GPIO_PIN_RESET)
-							sapa = 2;
-
-						if(HAL_GPIO_ReadPin(GPIOH,GPIO_PIN_11) == GPIO_PIN_RESET)
-							sapa = 3;
-				};
-				if(sapa == 2){
-					find_address = start_address;
-					for(int i = 0;i < 3;i++)
-					{
-							W25Q256_write(qspi_handler,start_address,(uint8_t *)AD_AVEM4[i],POSOFFSET);
-							start_address = start_address + POSOFFSET;// 1024*1024+2000+39*4*3*25
-					}
-					sprintf((char*)buf1,"t0.txt=\"save succesfully\"");
-					HMISends(buf1);
-					HMISend(0xff);
-					Pos_Storage_Num++;
-					sprintf((char*)buf1,"t1.txt=\"has saved %d dots Address: %d\"",Pos_Storage_Num,start_address);
-					HMISends(buf1);
-					HMISend(0xff);
-					
-					for(int i = 0;i < 3;i++)
-					{
-							W25Q256_read(qspi_handler,find_address,(uint8_t *)AD_AVEM4_Load[i],POSOFFSET);
-							find_address += POSOFFSET;
-					}
-					for (uint16_t j = 0; j < 39; j++)
-					{
-						printf("%f,%f,%f\n",AD_AVEM4_Load[0][j],AD_AVEM4_Load[1][j],AD_AVEM4_Load[2][j]);		
-					}
-					sapa = 4;
-				}
-				else if(sapa == 3){
-						sprintf((char*)buf1,"t0.txt=\"Skip Suceessfully\"");
-						HMISends(buf1);
-						HMISend(0xff);
-						sapa = 4;
-			}
-		}
+		ListCH1ForPos.ListForPos_GetData(5);
+		ListCH1ForPos.WavePrint(AD_AVE,39);
+		ListCH1ForPos.ListForPos_KeyDetect();
 }
-
-
 
 
 
@@ -788,8 +462,8 @@ void  Signal_Samp_Pos(void)
 			}
 		}
 				
-			NormMode2(AD_Vpp_All);
-			OY_FindMin(Norm_Mode2,144,&min_p,&row_p);
+			NormForPos1(AD_Vpp_All,100000.f);
+			OY_FindMin(NormPos1Data,144,&min_p,&row_p);
 //			printf("%d\r\n",row_p + 1);
 //			sprintf((char*)buf1,"t1.txt=\"at %d cell\"",row_p + 1);
 //			HMISends(buf1);
@@ -819,18 +493,21 @@ void  Signal_Samp_Neg(void)
 {
 //	float	corr_resmax[6];
 //	uint16_t	corr_resrow[6];
+	float *vp[3];
+	for(int i = 0;i<4;i++)
+		vp[i] = VoltNeg[i];
   while(!Knock_flag)
   {
-    AD7606C_MEASURE_Mode2();
+		AD7606C_SAMP_Start(DataNeg,	4*AD7606C_SAMP_SIZE);
     VoltJudge();
   }
   
 	if(Knock_flag){
-		ADC_BitToFloat_Mode2();
-		arm_correlate_f32(&volt_mode2[0][start],256,&volt_mode2[1][start],256,xcorr_out[0]);
-		arm_correlate_f32(&volt_mode2[0][start],256,&volt_mode2[2][start],256,xcorr_out[1]);
-		arm_correlate_f32(&volt_mode2[1][start],256,&volt_mode2[2][start],256,xcorr_out[2]);
-		arm_correlate_f32(&volt_mode2[2][start],256,&volt_mode2[3][start],256,xcorr_out[3]);
+		AD7606C_BitToFloat(DataNeg, vp, 4*AD7606C_SAMP_SIZE);
+		arm_correlate_f32(&VoltNeg[0][start],256,&VoltNeg[1][start],256,xcorr_out[0]);
+		arm_correlate_f32(&VoltNeg[0][start],256,&VoltNeg[2][start],256,xcorr_out[1]);
+		arm_correlate_f32(&VoltNeg[1][start],256,&VoltNeg[2][start],256,xcorr_out[2]);
+		arm_correlate_f32(&VoltNeg[2][start],256,&VoltNeg[3][start],256,xcorr_out[3]);
 		OY_Normalization(xcorr_out[0],511);
 		OY_Normalization(xcorr_out[1],511);
 		OY_Normalization(xcorr_out[2],511);
@@ -843,7 +520,7 @@ void  Signal_Samp_Neg(void)
 		
 //		for (uint16_t j = start - 50; j <= stop + 50; j++)
 //		{
-//			printf("%f,%f,%f,%f\n",volt_mode2[0][j],volt_mode2[1][j],volt_mode2[2][j],volt_mode2[3][j]);
+//			printf("%f,%f,%f,%f\n",VoltNeg[0][j],VoltNeg[1][j],VoltNeg[2][j],VoltNeg[3][j]);
 //		}
 		uartuse = 1;
 //		printf("\r\n****************************\r\n");
@@ -1326,13 +1003,6 @@ void TIM4_IRQHandler(void)
 
   HAL_TIM_IRQHandler(&htim4);
 }
-
-//void EXTI9_5_IRQHandler(void)
-//{
-//	sampflag = 1;
-//  __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_6);;
-//}
-
 
 
 /* USER CODE END 4 */

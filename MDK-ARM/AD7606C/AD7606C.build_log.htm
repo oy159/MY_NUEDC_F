@@ -27,24 +27,30 @@ Project File Date:  08/20/2023
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'F:\Program_Files\KEIL5\ARM\ARMCC\Bin'
 Build target 'AD7606C'
-compiling main.c...
+compiling Appuser.c...
+../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f767xx.h(181): warning:  #47-D: incompatible redefinition of macro "__FPU_PRESENT" 
+  #define __FPU_PRESENT             1U       /*!< FPU present                                   */
 ..\USER\Inc\diagram1.h(315): warning:  #1-D: last line of file ends without a newline
   	
 ..\HARDWARE\W25Q256\W25Q256.h(47): warning:  #1-D: last line of file ends without a newline
   #endif //TSMS_W25Q256_H
-../Core/Src/main.c(590): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\USER\Src\Appuser.c(370): warning:  #1-D: last line of file ends without a newline
+  }
+..\USER\Src\Appuser.c: 4 warnings, 0 errors
+compiling main.c...
+..\HARDWARE\W25Q256\W25Q256.h(47): warning:  #1-D: last line of file ends without a newline
+  #endif //TSMS_W25Q256_H
+../Core/Src/main.c(357): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   						AD_AVEM4[i][j] += AD_Vpp[i][j]/5.;
-../Core/Src/main.c(683): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  						AD_AVEM4[i][j] += AD_Vpp[i][j]/5.;
-../Core/Src/main.c(725): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+../Core/Src/main.c(399): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   				sprintf((char*)buf1,"t0.txt=\"(%.3fmm,%.3fmm)\"",(float)rand1[set_rand] + (float)(letter-13)*12.5 ,(float)rand2[set_rand] + (float)(num-13)*(-12.5));
-../Core/Src/main.c(1108): warning:  #188-D: enumerated type mixed with another type
+../Core/Src/main.c(785): warning:  #188-D: enumerated type mixed with another type
   	oystate = 100;
-../Core/Src/main.c: 6 warnings, 0 errors
+../Core/Src/main.c: 4 warnings, 0 errors
 linking...
-Program Size: Code=46352 RO-data=68740 RW-data=1304 ZI-data=259568  
+Program Size: Code=43296 RO-data=67960 RW-data=1372 ZI-data=259572  
 FromELF: creating hex file...
-"AD7606C\AD7606C.axf" - 0 Error(s), 6 Warning(s).
+"AD7606C\AD7606C.axf" - 0 Error(s), 8 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -73,7 +79,7 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:DSP:1.5.2
       Include file:  CMSIS\DSP\Include\arm_math.h
       Library file:  CMSIS\Lib\ARM\arm_cortexM7lfdp_math.lib
-Build Time Elapsed:  00:00:03
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

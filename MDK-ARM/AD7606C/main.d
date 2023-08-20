@@ -41,13 +41,13 @@ ad7606c\main.o: ../Core/Inc/dma.h
 ad7606c\main.o: ../Core/Inc/quadspi.h
 ad7606c\main.o: ../Core/Inc/tim.h
 ad7606c\main.o: ../Core/Inc/usart.h
+ad7606c\main.o: F:\Program_Files\KEIL5\ARM\ARMCC\Bin\..\include\stdio.h
 ad7606c\main.o: ../Core/Inc/gpio.h
 ad7606c\main.o: ../Core/Inc/fmc.h
 ad7606c\main.o: ..\USER\User_function.h
 ad7606c\main.o: ..\HARDWARE\AD7606C\AD7606C.h
 ad7606c\main.o: ..\HARDWARE\AD9959\ad9959.h
 ad7606c\main.o: F:\Program_Files\KEIL5\ARM\ARMCC\Bin\..\include\stdbool.h
-ad7606c\main.o: F:\Program_Files\KEIL5\ARM\ARMCC\Bin\..\include\stdio.h
 ad7606c\main.o: ..\USER\Inc\fft_user.h
 ad7606c\main.o: F:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include\arm_math.h
 ad7606c\main.o: ../Drivers/CMSIS/Include/core_cm7.h
@@ -56,7 +56,6 @@ ad7606c\main.o: F:\Program_Files\KEIL5\ARM\ARMCC\Bin\..\include\math.h
 ad7606c\main.o: F:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include\arm_const_structs.h
 ad7606c\main.o: F:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include\arm_common_tables.h
 ad7606c\main.o: ..\USER\Inc\correlation.h
-ad7606c\main.o: ..\USER\Inc\diagram1.h
 ad7606c\main.o: ..\HARDWARE\W9825G6KH\W9825G6KH.h
 ad7606c\main.o: ..\HARDWARE\W25Q256\W25Q256.h
 ad7606c\main.o: F:\Program_Files\KEIL5\ARM\ARMCC\Bin\..\include\stdlib.h

@@ -39,3 +39,12 @@ ad7606c\appuser.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h
 ad7606c\appuser.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h
 ad7606c\appuser.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h
 ad7606c\appuser.o: ../Core/Inc/tim.h
+ad7606c\appuser.o: ..\USER\Inc\diagram1.h
+ad7606c\appuser.o: ..\HARDWARE\AD7606C\AD7606C.h
+ad7606c\appuser.o: ..\HARDWARE\AD9959\ad9959.h
+ad7606c\appuser.o: F:\Program_Files\KEIL5\ARM\ARMCC\Bin\..\include\stdbool.h
+ad7606c\appuser.o: ../Core/Inc/gpio.h
+ad7606c\appuser.o: ..\USER\User_function.h
+ad7606c\appuser.o: ../Core/Inc/usart.h
+ad7606c\appuser.o: F:\Program_Files\KEIL5\ARM\ARMCC\Bin\..\include\stdio.h
+ad7606c\appuser.o: ..\HARDWARE\W25Q256\W25Q256.h

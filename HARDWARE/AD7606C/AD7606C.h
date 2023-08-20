@@ -54,5 +54,18 @@ extern	uint8_t	sampflag;
 extern	uint16_t *p;
 extern 	uint8_t AD7606C_flag;     //  AD采集完成标志
 
+/*		ADC DATA		*/
+/* ************************************ */
+
+extern 	uint16_t	data[8*AD7606C_SAMP_SIZE];
+extern 	float	volt[4][AD7606C_SAMP_SIZE];
+
+extern 	uint16_t	DataNeg[32*AD7606C_SAMP_SIZE];
+extern 	float VoltNeg[4][4*AD7606C_SAMP_SIZE];
+
+/* ************************************ */
+/* ************************************ */
+
+
 
 #endif /* __AD7606C_H */
