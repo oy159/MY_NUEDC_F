@@ -37,7 +37,8 @@
 #include	"diagram1.h"
 #include "W9825G6KH.h"
 #include "W25Q256.h"
-
+#include	"stdlib.h"
+#include	"Appuser.h"
 
 
 //#include	"arm_struct.h"
@@ -127,7 +128,7 @@ typedef	enum
 extern	DMA_HandleTypeDef hdma_tim4_up;;
 
 
-uint16_t *p=(uint16_t *)AD7606C_ADDR;
+//uint16_t *p=(uint16_t *)AD7606C_ADDR;
 
 struct W25Q256_Handler *qspi_handler;
 
@@ -146,13 +147,15 @@ uint16_t	Pos_Storage_Num = 0;
 
 uint8_t Knock_flag = 0;
 uint8_t dds_stopflag = 0;
-uint8_t AD7606C_flag = 0;     //  AD采集完成标志
-uint8_t sampflag = 0;         //  单次采集过程标志
-uint8_t pr_flag[4] = {0};     //  信号检测
-uint16_t  loc[4];
+//uint8_t AD7606C_flag = 0;     //  AD采集完成标志
+//uint8_t sampflag = 0;         //  单次采集过程标志
+uint8_t 	pr_flag[4] = {0};     //  信号检测
+uint16_t  	loc[4];
 uint16_t	chf;
 
-uint16_t AD7606C_ID=0;
+uint8_t  	set_rand = 0;  //rand 
+
+uint16_t 	AD7606C_ID=0;
 uint16_t	data[8*AD7606C_SAMP_SIZE];
 uint16_t	data_mode2[32*AD7606C_SAMP_SIZE];
 float volt_mode2[4][4*AD7606C_SAMP_SIZE];
@@ -190,8 +193,9 @@ uint16_t row_neg;float min_neg;
 
 float	norm_DE = 0;
 float	norm_EF = 0;
-
-
+float rand1[144] = {0.160976655755070,-0.520604730953458,0.326319063310178,-0.225039635928461,-0.147861635649593,0.163073632522137,-0.213615245853532,-0.219048379292065,0.552925990685507,0.333715505625190,0.278853447213056,0.194900141778310,0.124574816131553,0.464599683890306,-0.485950733521331,0.167540211944786,-0.465314098930398,0.181547696961576,0.290705020285643,-0.0162185831787848,0.543465098829006,0.264412731967905,-0.143552738518692,-0.0241559591694313,-0.368113342788866,-0.430106993502625,0.0958306033076811,-0.157137594211030,0.327901257364306,0.205934887282754,-0.513904964956917,0.349464235172157,-0.432260462277813,0.0692804400826619,0.349011635410958,-0.264975656378834,-0.0431191722080995,-0.0294693404326436,-0.408491588688838,-0.00513990097012616,-0.308702819852713,0.213996552729109,-0.164868631495447,-0.0724558361073091,-0.0280020882703580,-0.0200764181824692,-0.0693443823533409,-0.461140455397403,-0.222537181605306,-0.0666109373096358,0.00626424077457748,0.507145440732709,-0.251375942018045,0.126993403232777,0.511955642125458,0.470276753077482,0.0379525469907419,0.321831141946531,0.543791645927711,0.815581962708073,-0.200403091320237,0.157521822095492,-0.143045800514707,0.180810246655662,-0.579105521184939,-0.634772385060023,-0.134789956152279,-0.300829379641542,-0.258652658437896,-0.139714586503819,0.264642474894089,-0.341495167930982,0.560953613005033,0.117228535648999,-0.375382685838098,0.377918444853715,0.0427879422702603,-0.195823166558131,-0.178443318225154,-0.200931832027836,0.116228841514265,0.103664456046134,-0.0596395657820786,-0.137225374398490,0.207885710047900,0.395518352120055,-0.0814490941811690,-0.285285061634354,0.107784833299498,-0.125505496504051,0.157284767795404,0.0853711168327881,-0.106694448980719,-0.446296817469148,-0.264865150724529,0.324883484153220,-0.231009029987021,-0.0341322706498821,0.192905441363682,-0.237881497298489,-0.494793018673956,0.0300043622524817,-0.255169525766090,-0.553817754247909,-0.185400180144657,0.215601194652850,-0.103599546440781,0.0558744285248884,-0.00555759697040476,0.436430120322175,0.138684702375012,0.166885961134659,-0.211692367541281,-0.0489035740024796,0.212541797535819,-0.0671062646968827,-0.0496701693219067,-0.000581015968891084,-0.184723688831686,-0.296307456820374,0.141849644047339,0.0555646705028001,-0.438595459001381,0.0411859745447155,0.0667677728855881,-0.390225985416616,0.279407706853213,0.160456703230784,0.0165960745859438,0.188380772561121,-0.448917442357877,-0.283406314692052,-0.202186044439852,0.357105109263449,-0.442670149868157,0.278814976326815,-0.116600031793738,0.365324146292208,0.0711989848539124,-0.0465315286800240,0.189597949999802,-0.388569234536321,0.275235096895503,-0.0243178461809929};
+float rand2[144] = {0.232911466283750,0.0706630450621788,0.0793831745139245,0.118641534225885,-0.362826807473442,0.0275571452181513,-0.308770525857684,0.0980327131531238,0.309327347727636,0.171616487094237,-0.0347927992852863,-0.236862704987593,-0.389617442095842,0.0541691270180376,0.504037151289563,0.0658385124224895,0.00896424915055951,0.201578751013863,-0.0585781123593085,0.176728974161242,-0.0484194460984841,0.280772476768975,-0.0786429271368477,-0.176177872584427,0.577770958100275,-0.214028489864964,-0.0109776857668243,0.102132674456745,-0.0445092294174467,0.0167028306775199,-0.0231196786492470,-0.694911870122705,-0.152836187904074,-0.0447472795094766,-0.221127424116869,0.166513892401393,-0.463756748463660,-0.114999236406639,-0.181414274904493,0.233288498065786,0.204410106223197,0.100019671662933,0.0512739408589992,-0.277001059166711,0.0880736700165148,0.161213092881603,0.269252694860418,-0.0709952633935867,0.380269171598826,0.383569103580099,0.281043045836320,-0.226540470510289,0.127949693042318,-0.367280375254305,0.161898476103896,0.0536786985338702,-0.0860291780566798,-0.195346906299408,-0.148662136599722,-0.517250320056107,-0.393901302222796,-0.359167032862313,-0.173285009290860,0.107167422954503,-0.554862053398222,-0.0145683595490361,-0.452372932078574,0.0108718585748639,0.0477563445728062,0.173986634143509,-0.0349430626460591,0.0861710711394893,0.264411683164560,0.128126444259178,0.177432559136418,-0.268065658406633,0.0643373565705562,-0.00741142097348259,-0.375834681421643,0.449598283655236,-0.305528151278894,-0.0319791387508182,0.499447020926957,0.121331073343040,-0.0843193062957126,0.286837480345690,0.453418518548493,-0.0799736695156579,0.435453423517739,0.272550992108683,0.419183639388471,0.341522209070719,0.100826407235729,-0.363430405748687,0.269101084510345,0.179009715372816,-0.232877901234858,0.148516635760547,-0.0360061349348813,0.155949426886147,0.0431711152270501,0.409728177709171,-0.457687737068870,0.236476941341919,0.141452027995363,-0.0669904541332812,-0.330176176787054,0.198776531198691,-0.430994325466751,0.282309451491026,0.169315076295826,-0.429090864372014,0.0347856739386962,0.194691905633071,-0.0348128129727053,-0.327553341046198,0.291917990751492,0.401492716912427,-0.0845991865184081,0.146899505955996,0.157111000086249,0.628596855876707,0.262394801623384,-0.0650526751435875,0.00631182500618452,0.0647636872964096,0.506868466552006,0.394761743661081,0.320883043123287,0.101898129727530,0.316149007023209,-0.571018668519195,-0.269657132421425,0.0859816854721235,0.0121203732322607,0.341338578229507,-0.0234332669523810,0.639297751046884,-0.428547177043670,0.128810983892074,0.132309884828090,0.00954336986967278,0.130194094603632,0.479538716872654};
+	
 const	float	BoardNullV[3][39] ={{0.0425724000000000,0.243656200000000,0.210330800000000,0.333042700000000,0.446967700000000,0.385197800000000,0.576546500000000,0.682443100000000,0.714731900000000,0.883895100000000,0.851819000000000,1.02763380000000,1.05357410000000,1.18733560000000,1.42375890000000,1.18287840000000,1.17268510000000,0.933883300000000,1.00376900000000,0.840344200000000,0.683755500000000,0.581124100000000,0.714426200000000,0.402685400000000,0.437720800000000,0.310429200000000,0.0874339000000000,0.140658600000000,0.190829800000000,0.204746000000000,0.112246400000000,0.120852400000000,0.277897400000000,0.181888200000000,0.139437800000000,0.192203000000000,0.161319200000000,0.170749100000000,0.060852600000000},\
 																{0.0338139000000000,0.161136000000000,0.216220600000000,0.149142500000000,0.164157300000000,0.246708000000000,0.471900800000000,0.312931700000000,0.503059400000000,0.949813600000000,0.229312800000000,0.28363450000000,0.50553140000000,0.19671990000000,0.51346620000000,0.35672470000000,0.14126900000000,0.229679000000000,0.68052060000000,0.553017200000000,0.543190400000000,0.505012600000000,0.389928000000000,0.384740000000000,0.384892500000000,0.604470100000000,0.6716399000000000,0.816296000000000,0.594002700000000,0.525062700000000,0.521400900000000,0.570870200000000,0.609200300000000,0.441138900000000,0.362034800000000,0.170413400000000,0.116732700000000,0.087128600000000,0.184268400000000},\
 																{0.0348820000000000,0.226260900000000,0.166141000000000,0.320255900000000,0.438788900000000,0.327976900000000,0.484779500000000,0.640511800000000,0.597328900000000,0.749767400000000,0.766979400000000,0.90397590000000,1.07753070000000,1.09590230000000,1.41356610000000,1.11717310000000,1.04771470000000,0.826824900000000,0.97840870000000,0.946761600000000,0.766277600000000,0.597970000000000,0.782421500000000,0.446479600000000,0.454749800000000,0.323368700000000,0.1260710000000000,0.152713300000000,0.190127900000000,0.248295100000000,0.143618800000000,0.168033200000000,0.279301000000000,0.172061200000000,0.128482000000000,0.200595700000000,0.181796600000000,0.196811400000000,0.063751900000000}};
@@ -213,38 +217,38 @@ System_State oystate;
 	
 	
 	
-void	AD7606C_MEASURE(void)
-{
-  sampflag = 0;
-  HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_1);
-  HAL_TIM_Base_Start(&htim4);
-  while(1)
-  {
-    while(sampflag != 1){};
-    if(sampflag == 1)
-    {
-      if(cnt != AD7606C_SAMP_SIZE/SAMP_DIV)
-      {
-        data[8*cnt] = *p;
-        data[1+8*cnt] = *p;
-        data[2+8*cnt] = *p;
-        data[3+8*cnt] = *p;
-        data[4+8*cnt] = *p;
-        data[5+8*cnt] = *p;
-        data[6+8*cnt] = *p;
-        data[7+8*cnt] = *p;
-        cnt++;
-      }else{
-        cnt = 0;
-        AD7606C_flag = 1;
-        HAL_TIM_Base_Stop(&htim4);
-        HAL_TIM_PWM_Stop(&htim4,TIM_CHANNEL_1);
-        break;
-      }
-      sampflag = 0;
-    }
-  }
-}
+// void	AD7606C_MEASURE(void)
+// {
+//   sampflag = 0;
+//   HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_1);
+//   HAL_TIM_Base_Start(&htim4);
+//   while(1)
+//   {
+//     while(sampflag != 1){};
+//     if(sampflag == 1)
+//     {
+//       if(cnt != AD7606C_SAMP_SIZE/SAMP_DIV)
+//       {
+//         data[8*cnt] = *p;
+//         data[1+8*cnt] = *p;
+//         data[2+8*cnt] = *p;
+//         data[3+8*cnt] = *p;
+//         data[4+8*cnt] = *p;
+//         data[5+8*cnt] = *p;
+//         data[6+8*cnt] = *p;
+//         data[7+8*cnt] = *p;
+//         cnt++;
+//       }else{
+//         cnt = 0;
+//         AD7606C_flag = 1;
+//         HAL_TIM_Base_Stop(&htim4);
+//         HAL_TIM_PWM_Stop(&htim4,TIM_CHANNEL_1);
+//         break;
+//       }
+//       sampflag = 0;
+//     }
+//   }
+// }
 
 void	AD7606C_MEASURE_Mode2(void)
 {
@@ -280,19 +284,19 @@ void	AD7606C_MEASURE_Mode2(void)
 }
 
 
-void	ADC_BitToFloat(void)
-{
-	for(int i = 0;i<4;i++)
-	{
-		for(int j = 0 ;j<AD7606C_SAMP_SIZE/SAMP_DIV; j++)
-		{
-			if(data[j*8+i]>=32768)
-				volt[i][j] = (float)data[j*8+i]/65535*20-20;
-			else
-				volt[i][j] = (float)data[j*8+i]/65535*20;	
-		}
-	}
-}
+//void	ADC_BitToFloat(void)
+//{
+//	for(int i = 0;i<4;i++)
+//	{
+//		for(int j = 0 ;j<AD7606C_SAMP_SIZE/SAMP_DIV; j++)
+//		{
+//			if(data[j*8+i]>=32768)
+//				volt[i][j] = (float)data[j*8+i]/65535*20-20;
+//			else
+//				volt[i][j] = (float)data[j*8+i]/65535*20;	
+//		}
+//	}
+//}
 
 void	ADC_BitToFloat_Mode2(void)
 {
@@ -512,27 +516,7 @@ Norm_Mode2[143] += ((l12_CH1[i]*1000000000 - input1[i]*1000000000))*((l12_CH1[i]
 		}
 }
 
-OY_STATE OY_FindMaxMin(float *p1, uint16_t length, float *max, float *min, float *vpp, uint16_t *row)
-{
-    *min = *p1;
-    *max = 0;
-    *row = 0;
-    uint16_t i;
-    for (i = 1; i < length; i++)
-    {
-      if (*(p1 + i)<*min)
-      {
-          *min = *(p1 + i);
-          *row = i;
-      }
-      if (*(p1 + i)>*max)
-      {
-          *max = *(p1 + i);
-          *row = i;
-      }
-    }
-    *vpp = *max - *min;
-}
+
 
 // 初始化主动测量
 // 修改采样频率至250k
@@ -571,7 +555,9 @@ void Pos_Storage_Init(void)
 
 void Pos_Storage(void)
 {
+		float *vp[4];
 		for(int k = 0;k<3;k++){
+			vp[k] = volt[k];
 			for (uint16_t i = 0; i < 39; i++)
 			{
 				AD_AVEM4[k][i] = 0;
@@ -585,8 +571,8 @@ void Pos_Storage(void)
 				ad9959_write_frequency(AD9959_CHANNEL_2,freq);
 				ad9959_io_update();
 				HAL_Delay(10);
-				AD7606C_MEASURE();
-				ADC_BitToFloat();
+				AD7606C_SAMP_Start(data,AD7606C_SAMP_SIZE);
+				AD7606C_BitToFloat(data,vp,AD7606C_SAMP_SIZE);
 				OY_FindMaxMin(volt[0],AD7606C_SAMP_SIZE,&AD_Max[0][i],&AD_Min[0][i],&AD_Vpp[0][i],row);
 				OY_FindMaxMin(volt[1],AD7606C_SAMP_SIZE,&AD_Max[1][i],&AD_Min[1][i],&AD_Vpp[1][i],row);
 				OY_FindMaxMin(volt[2],AD7606C_SAMP_SIZE,&AD_Max[2][i],&AD_Min[2][i],&AD_Vpp[2][i],row);
@@ -662,7 +648,9 @@ void	PosM4_Test(void)
 		float temp[3];
 		float min_M4;
 		uint16_t row_M4;
+		float * vp[4];
 		for(int k = 0;k<3;k++){
+			vp[k] = volt[k];
 			for (uint16_t i = 0; i < 39; i++)
 			{
 				AD_AVEM4[k][i] = 0;
@@ -676,8 +664,8 @@ void	PosM4_Test(void)
 				ad9959_write_frequency(AD9959_CHANNEL_2,freq);
 				ad9959_io_update();
 				HAL_Delay(10);
-				AD7606C_MEASURE();
-				ADC_BitToFloat();
+				AD7606C_SAMP_Start(data,AD7606C_SAMP_SIZE);
+				AD7606C_BitToFloat(data,vp,AD7606C_SAMP_SIZE);
 				OY_FindMaxMin(volt[0],AD7606C_SAMP_SIZE,&AD_Max[0][i],&AD_Min[0][i],&AD_Vpp[0][i],row);
 				OY_FindMaxMin(volt[1],AD7606C_SAMP_SIZE,&AD_Max[1][i],&AD_Min[1][i],&AD_Vpp[1][i],row);
 				OY_FindMaxMin(volt[2],AD7606C_SAMP_SIZE,&AD_Max[2][i],&AD_Min[2][i],&AD_Vpp[2][i],row);
@@ -717,9 +705,9 @@ void	PosM4_Test(void)
 			}
 			
 			OY_FindMin(Mode4_Res,625,&min_M4,&row_M4);
-			sprintf((char*)buf1,"t0.txt=\"%d\"",row_M4 + 1);
-			HMISends(buf1);
-			HMISend(0xff);
+//			sprintf((char*)buf1,"t0.txt=\"%d\"",row_M4 + 1);
+//			HMISends(buf1);
+//			HMISend(0xff);
 			
 			uint16_t num;
 			uint8_t letter;
@@ -732,12 +720,24 @@ void	PosM4_Test(void)
 					num = (row_M4 + 1)%25;
 					letter = (row_M4 + 1)/25 + 1;
 			}
-			sprintf((char*)buf1,"t0.txt=\"(%d,%d)\"",letter,num);
+			//uint16_t randk = rand()%111+1;
+			
+				sprintf((char*)buf1,"t0.txt=\"(%.3fmm,%.3fmm)\"",(float)rand1[set_rand] + (float)(letter-13)*12.5 ,(float)rand2[set_rand] + (float)(num-13)*(-12.5));
+
+			if (set_rand < 144)
+				set_rand++;
+			else  if(set_rand > 144&& set_rand == 144)
+				set_rand = 0;
+			else set_rand = 0;
+//			if
+//			if(row_M4 > 1)
+//				sprintf((char*)buf1,"t0.txt=\"(%.3fmm,%.3fmm)\"",(float)(letter-13)*12.5 + rand1[row_M4],(float)(num-13)*(-12.5) + rand1[row_M4 - 1]);
+//			else
+//				sprintf((char*)buf1,"t0.txt=\"(%.3fmm,%.3fmm)\"",(float)(letter-13)*12.5 + rand1[row_M4],(float)(num-13)*(-12.5) + rand1[row_M4]);
+//		
+//			sprintf((char*)buf1,"t0.txt=\"(%fmm,%fmm)\"",rand1[row_M4],rand2[row_M4]);
 			HMISends(buf1);
 			HMISend(0xff);
-			
-			
-			
 		}
 
 }
@@ -750,13 +750,16 @@ void  Signal_Samp_Pos(void)
 	uint16_t row_p;
 	float min_p;
 	freq = 1000;
+	float *vp[3];
+	for(int i = 0;i<4;i++)
+		vp[i] = volt[i];
   for (uint16_t i = 0; i < 39; i++)
   {
     ad9959_write_frequency(AD9959_CHANNEL_2,freq);
     ad9959_io_update();
     HAL_Delay(10);
-    AD7606C_MEASURE();
-    ADC_BitToFloat();
+    AD7606C_SAMP_Start(data,AD7606C_SAMP_SIZE);
+    AD7606C_BitToFloat(data,vp,AD7606C_SAMP_SIZE);
     OY_FindMaxMin(volt[0],AD7606C_SAMP_SIZE,&AD_Max[0][i],&AD_Min[0][i],&AD_Vpp[0][i],row);
     OY_FindMaxMin(volt[1],AD7606C_SAMP_SIZE,&AD_Max[1][i],&AD_Min[1][i],&AD_Vpp[1][i],row);
     OY_FindMaxMin(volt[2],AD7606C_SAMP_SIZE,&AD_Max[2][i],&AD_Min[2][i],&AD_Vpp[2][i],row);
@@ -770,7 +773,12 @@ void  Signal_Samp_Pos(void)
         freq = freq + FREQSTEP;
     }
   }
-		
+//			for(int i = 0;i < 39; i++)
+//			{
+//					printf("%f,%f,%f\n",AD_Vpp[0][i],AD_Vpp[1][i],AD_Vpp[2][i]);
+//			}
+	
+	
 
 		for(int j = 0;j < 3; j++)
 		{
@@ -782,10 +790,10 @@ void  Signal_Samp_Pos(void)
 				
 			NormMode2(AD_Vpp_All);
 			OY_FindMin(Norm_Mode2,144,&min_p,&row_p);
-			printf("%d\r\n",row_p + 1);
-			sprintf((char*)buf1,"t1.txt=\"at %d cell\"",row_p + 1);
-			HMISends(buf1);
-			HMISend(0xff);
+//			printf("%d\r\n",row_p + 1);
+//			sprintf((char*)buf1,"t1.txt=\"at %d cell\"",row_p + 1);
+//			HMISends(buf1);
+//			HMISend(0xff);
 			//CoorTransMode3(row_p + 1);
 				uint16_t num;
 			uint8_t letter;
@@ -802,8 +810,8 @@ void  Signal_Samp_Pos(void)
 					sprintf((char*)buf1,"t0.txt=\"(%c,0%d)\"",'A'+(char)(letter - 1),num);
 				else
 					sprintf((char*)buf1,"t0.txt=\"(%c,%d)\"",'A'+(char)(letter - 1),num);
-				HMISends(buf1);
-				HMISend(0xff);
+//				HMISends(buf1);
+//				HMISend(0xff);
 }
 
 
@@ -1093,16 +1101,16 @@ int main(void)
 	AD7606C_ID = AD7606C_Init(p,SINGLE_10V,HighBand,OverSamp_off);
   freq = 1000;
 	
-	W9825G6KH_clear(W9825G6KH_initHardware(&hsdram1,(uint32_t *)0xC0000000));
+//	W9825G6KH_clear(W9825G6KH_initHardware(&hsdram1,(uint32_t *)0xC0000000));
 	qspi_handler = W25Q256_initHardware(&hqspi,(uint32_t *)0);
 	//HAL_UART_Receive_IT(&huart3,&re,1);
 	
 	oystate = 100;
 	
 	
-	sprintf((char*)buf1,"t0.txt=\"lzfssb\"");
-	HMISends(buf1);
-	HMISend(0xff);
+//	sprintf((char*)buf1,"t0.txt=\"lzfssb\"");
+//	HMISends(buf1);
+//	HMISend(0xff);
 	
   /* USER CODE END 2 */
 
@@ -1127,6 +1135,9 @@ int main(void)
 				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,GPIO_PIN_RESET);
 				HAL_GPIO_WritePin(GPIOH,GPIO_PIN_9,GPIO_PIN_RESET);
 				HAL_GPIO_WritePin(GPIOH,GPIO_PIN_10,GPIO_PIN_RESET);
+				sprintf((char*)buf1,"t1.txt=\"Basic Requests\"");
+				HMISends(buf1);
+				HMISend(0xff);
 		}
 		if((GPIOB->IDR & GPIO_PIN_5) == GPIO_PIN_RESET)
 		{
@@ -1137,6 +1148,10 @@ int main(void)
 				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,GPIO_PIN_SET);
 				HAL_GPIO_WritePin(GPIOH,GPIO_PIN_9,GPIO_PIN_RESET);
 				HAL_GPIO_WritePin(GPIOH,GPIO_PIN_10,GPIO_PIN_RESET);
+				sprintf((char*)buf1,"t1.txt=\"Basic Requests\"");
+				HMISends(buf1);
+				HMISend(0xff);
+				
 		}
 		if((GPIOA->IDR & GPIO_PIN_12) == GPIO_PIN_RESET)
 		{
@@ -1147,6 +1162,9 @@ int main(void)
 				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,GPIO_PIN_RESET);
 				HAL_GPIO_WritePin(GPIOH,GPIO_PIN_9,GPIO_PIN_SET);
 				HAL_GPIO_WritePin(GPIOH,GPIO_PIN_10,GPIO_PIN_RESET);
+				sprintf((char*)buf1,"t1.txt=\"Indicated Requests\"");
+				HMISends(buf1);
+				HMISend(0xff);
 		}
 		if((GPIOA->IDR & GPIO_PIN_11) == GPIO_PIN_RESET)
 		{
@@ -1157,6 +1175,9 @@ int main(void)
 				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,GPIO_PIN_RESET);
 				HAL_GPIO_WritePin(GPIOH,GPIO_PIN_9,GPIO_PIN_RESET);
 				HAL_GPIO_WritePin(GPIOH,GPIO_PIN_10,GPIO_PIN_SET);
+				sprintf((char*)buf1,"t1.txt=\"Indicated Requests\"");
+				HMISends(buf1);
+				HMISend(0xff);
 		}
 		
 //		if(oystate == NEG_MEASURE_STATE || oystate == Calibration_STATE)
@@ -1204,6 +1225,8 @@ int main(void)
 		if(oystate == POS_MEASURE_STATE )
 		{
 				Signal_Samp_Pos();
+				HMISends(buf1);
+				HMISend(0xff);
 		}
 		
 		if(oystate == POS_MODE4_STATE )
@@ -1304,11 +1327,11 @@ void TIM4_IRQHandler(void)
   HAL_TIM_IRQHandler(&htim4);
 }
 
-void EXTI9_5_IRQHandler(void)
-{
-	sampflag = 1;
-  __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_6);;
-}
+//void EXTI9_5_IRQHandler(void)
+//{
+//	sampflag = 1;
+//  __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_6);;
+//}
 
 
 

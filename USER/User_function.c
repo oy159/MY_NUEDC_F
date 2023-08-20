@@ -46,6 +46,30 @@ OY_STATE OY_Normalization(float *p1, uint16_t length)
 	
 }
 
+OY_STATE OY_FindMaxMin(float *p1, uint16_t length, float *max, float *min, float *vpp, uint16_t *row)
+{
+    *min = *p1;
+    *max = 0;
+    *row = 0;
+    uint16_t i;
+    for (i = 1; i < length; i++)
+    {
+      if (*(p1 + i)<*min)
+      {
+          *min = *(p1 + i);
+          *row = i;
+      }
+      if (*(p1 + i)>*max)
+      {
+          *max = *(p1 + i);
+          *row = i;
+      }
+    }
+    *vpp = *max - *min;
+}
+
+
+
 OY_STATE OY_Norm(float *p1, float *p2, uint16_t length, float *out, float bp)
 {
 		*out = 0;

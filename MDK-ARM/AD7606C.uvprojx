@@ -688,6 +688,11 @@
               <FileType>1</FileType>
               <FilePath>..\USER\Src\windows_user.c</FilePath>
             </File>
+            <File>
+              <FileName>Appuser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\Src\Appuser.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

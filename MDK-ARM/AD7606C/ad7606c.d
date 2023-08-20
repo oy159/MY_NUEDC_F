@@ -38,3 +38,4 @@ ad7606c\ad7606c.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h
 ad7606c\ad7606c.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h
 ad7606c\ad7606c.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h
 ad7606c\ad7606c.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h
+ad7606c\ad7606c.o: ../Core/Inc/tim.h

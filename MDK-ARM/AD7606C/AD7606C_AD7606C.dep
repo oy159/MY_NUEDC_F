@@ -1,7 +1,7 @@
 Dependencies for Project 'AD7606C', Target 'AD7606C': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
 F (startup_stm32f767xx.s)(0x64CDB73B)(--cpu Cortex-M7.fp.dp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_AD7606C-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include-IF:\Program_Files\KEIL5\Keil\STM32F7xx_DFP\2.15.1\Drivers\CMSIS\Device\ST\STM32F7xx\Include--pd "__UVISION_VERSION SETA 536" --pd "_RTE_ SETA 1" --pd "STM32F767xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f767xx.lst --xref -o ad7606c\startup_stm32f767xx.o --depend ad7606c\startup_stm32f767xx.d)
-F (../Core/Src/main.c)(0x64CDDD91)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ..\HARDWARE\AD7606C -I ..\HARDWARE\AD9959 -I ..\USER -I ..\USER\Inc -I ..\HARDWARE\W25Q256 -I ..\HARDWARE\W9825G6KH-I.\RTE\_AD7606C-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include-IF:\Program_Files\KEIL5\Keil\STM32F7xx_DFP\2.15.1\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F767xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F767xx -DARM_MATH_CM7-o ad7606c\main.o --omf_browse ad7606c\main.crf --depend ad7606c\main.d)
+F (../Core/Src/main.c)(0x64E1A49C)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ..\HARDWARE\AD7606C -I ..\HARDWARE\AD9959 -I ..\USER -I ..\USER\Inc -I ..\HARDWARE\W25Q256 -I ..\HARDWARE\W9825G6KH-I.\RTE\_AD7606C-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include-IF:\Program_Files\KEIL5\Keil\STM32F7xx_DFP\2.15.1\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F767xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F767xx -DARM_MATH_CM7-o ad7606c\main.o --omf_browse ad7606c\main.crf --depend ad7606c\main.d)
 I (../Core/Inc/main.h)(0x64CCE94A)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h)(0x6495CDDD)
 I (../Core/Inc/stm32f7xx_hal_conf.h)(0x64CCE94A)
@@ -45,8 +45,8 @@ I (../Core/Inc/tim.h)(0x64CCE949)
 I (../Core/Inc/usart.h)(0x64CCE94A)
 I (../Core/Inc/gpio.h)(0x64CCE948)
 I (../Core/Inc/fmc.h)(0x64CCE949)
-I (..\USER\User_function.h)(0x64CD2EDE)
-I (..\HARDWARE\AD7606C\AD7606C.h)(0x64CBCBC9)
+I (..\USER\User_function.h)(0x64E0FEB3)
+I (..\HARDWARE\AD7606C\AD7606C.h)(0x64E1A345)
 I (..\HARDWARE\AD9959\ad9959.h)(0x64A3F18D)
 I (F:\Program_Files\KEIL5\ARM\ARMCC\include\stdbool.h)(0x6025237C)
 I (F:\Program_Files\KEIL5\ARM\ARMCC\include\stdio.h)(0x60252374)
@@ -60,6 +60,8 @@ I (..\USER\Inc\correlation.h)(0x6356C723)
 I (..\USER\Inc\diagram1.h)(0x64CD1DC2)
 I (..\HARDWARE\W9825G6KH\W9825G6KH.h)(0x64CC7E2B)
 I (..\HARDWARE\W25Q256\W25Q256.h)(0x64CC7E7C)
+I (F:\Program_Files\KEIL5\ARM\ARMCC\include\stdlib.h)(0x60252374)
+I (..\USER\Inc\Appuser.h)(0x64E19DF2)
 F (../Core/Src/gpio.c)(0x64CDD558)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ..\HARDWARE\AD7606C -I ..\HARDWARE\AD9959 -I ..\USER -I ..\USER\Inc -I ..\HARDWARE\W25Q256 -I ..\HARDWARE\W9825G6KH-I.\RTE\_AD7606C-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include-IF:\Program_Files\KEIL5\Keil\STM32F7xx_DFP\2.15.1\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F767xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F767xx -DARM_MATH_CM7-o ad7606c\gpio.o --omf_browse ad7606c\gpio.crf --depend ad7606c\gpio.d)
 I (../Core/Inc/gpio.h)(0x64CCE948)
 I (../Core/Inc/main.h)(0x64CCE94A)
@@ -1222,8 +1224,8 @@ I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h)(0x6495CDDD)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h)(0x6495CDDD)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h)(0x6495CDDD)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h)(0x6495CDDD)
-F (..\HARDWARE\AD7606C\AD7606C.c)(0x64C75A2A)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ..\HARDWARE\AD7606C -I ..\HARDWARE\AD9959 -I ..\USER -I ..\USER\Inc -I ..\HARDWARE\W25Q256 -I ..\HARDWARE\W9825G6KH-I.\RTE\_AD7606C-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include-IF:\Program_Files\KEIL5\Keil\STM32F7xx_DFP\2.15.1\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F767xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F767xx -DARM_MATH_CM7-o ad7606c\ad7606c.o --omf_browse ad7606c\ad7606c.crf --depend ad7606c\ad7606c.d)
-I (..\HARDWARE\AD7606C\AD7606C.h)(0x64CBCBC9)
+F (..\HARDWARE\AD7606C\AD7606C.c)(0x64E1A345)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ..\HARDWARE\AD7606C -I ..\HARDWARE\AD9959 -I ..\USER -I ..\USER\Inc -I ..\HARDWARE\W25Q256 -I ..\HARDWARE\W9825G6KH-I.\RTE\_AD7606C-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include-IF:\Program_Files\KEIL5\Keil\STM32F7xx_DFP\2.15.1\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F767xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F767xx -DARM_MATH_CM7-o ad7606c\ad7606c.o --omf_browse ad7606c\ad7606c.crf --depend ad7606c\ad7606c.d)
+I (..\HARDWARE\AD7606C\AD7606C.h)(0x64E1A345)
 I (../Core/Inc/main.h)(0x64CCE94A)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h)(0x6495CDDD)
 I (../Core/Inc/stm32f7xx_hal_conf.h)(0x64CCE94A)
@@ -1261,6 +1263,7 @@ I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h)(0x6495CDDD)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h)(0x6495CDDD)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h)(0x6495CDDD)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h)(0x6495CDDD)
+I (../Core/Inc/tim.h)(0x64CCE949)
 F (..\HARDWARE\AD9959\ad9959.c)(0x64A3D0C8)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ..\HARDWARE\AD7606C -I ..\HARDWARE\AD9959 -I ..\USER -I ..\USER\Inc -I ..\HARDWARE\W25Q256 -I ..\HARDWARE\W9825G6KH-I.\RTE\_AD7606C-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include-IF:\Program_Files\KEIL5\Keil\STM32F7xx_DFP\2.15.1\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F767xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F767xx -DARM_MATH_CM7-o ad7606c\ad9959.o --omf_browse ad7606c\ad9959.crf --depend ad7606c\ad9959.d)
 I (..\HARDWARE\AD9959\ad9959.h)(0x64A3F18D)
 I (F:\Program_Files\KEIL5\ARM\ARMCC\include\stdbool.h)(0x6025237C)
@@ -1380,8 +1383,8 @@ I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h)(0x6495CDDD)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h)(0x6495CDDD)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h)(0x6495CDDD)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h)(0x6495CDDD)
-F (..\USER\User_function.c)(0x64CD8FAD)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ..\HARDWARE\AD7606C -I ..\HARDWARE\AD9959 -I ..\USER -I ..\USER\Inc -I ..\HARDWARE\W25Q256 -I ..\HARDWARE\W9825G6KH-I.\RTE\_AD7606C-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include-IF:\Program_Files\KEIL5\Keil\STM32F7xx_DFP\2.15.1\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F767xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F767xx -DARM_MATH_CM7 -D__FPU_PRESENT-o ad7606c\user_function.o --omf_browse ad7606c\user_function.crf --depend ad7606c\user_function.d)
-I (..\USER\User_function.h)(0x64CD2EDE)
+F (..\USER\User_function.c)(0x64E0FEB3)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ..\HARDWARE\AD7606C -I ..\HARDWARE\AD9959 -I ..\USER -I ..\USER\Inc -I ..\HARDWARE\W25Q256 -I ..\HARDWARE\W9825G6KH-I.\RTE\_AD7606C-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include-IF:\Program_Files\KEIL5\Keil\STM32F7xx_DFP\2.15.1\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F767xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F767xx -DARM_MATH_CM7 -D__FPU_PRESENT-o ad7606c\user_function.o --omf_browse ad7606c\user_function.crf --depend ad7606c\user_function.d)
+I (..\USER\User_function.h)(0x64E0FEB3)
 I (../Core/Inc/main.h)(0x64CCE94A)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h)(0x6495CDDD)
 I (../Core/Inc/stm32f7xx_hal_conf.h)(0x64CCE94A)
@@ -1463,4 +1466,44 @@ I (..\USER\Inc\windows_user.h)(0x6357D13F)
 I (F:\Program_Files\KEIL5\ARM\ARMCC\include\stdint.h)(0x6025237E)
 I (F:\Program_Files\KEIL5\ARM\ARMCC\include\math.h)(0x60252378)
 I (F:\Program_Files\KEIL5\ARM\ARMCC\include\stdlib.h)(0x60252374)
+F (..\USER\Src\Appuser.c)(0x64E19DF2)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ..\HARDWARE\AD7606C -I ..\HARDWARE\AD9959 -I ..\USER -I ..\USER\Inc -I ..\HARDWARE\W25Q256 -I ..\HARDWARE\W9825G6KH-I.\RTE\_AD7606C-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IF:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include-IF:\Program_Files\KEIL5\Keil\STM32F7xx_DFP\2.15.1\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F767xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F767xx -DARM_MATH_CM7 -D__FPU_PRESENT-o ad7606c\appuser.o --omf_browse ad7606c\appuser.crf --depend ad7606c\appuser.d)
+I (..\USER\Inc\Appuser.h)(0x64E19DF2)
+I (../Core/Inc/main.h)(0x64CCE94A)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h)(0x6495CDDD)
+I (../Core/Inc/stm32f7xx_hal_conf.h)(0x64CCE94A)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h)(0x6495CDDD)
+I (../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h)(0x6495CDDD)
+I (../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f767xx.h)(0x6495CDDD)
+I (../Drivers/CMSIS/Include/core_cm7.h)(0x6495CCCA)
+I (F:\Program_Files\KEIL5\ARM\ARMCC\include\stdint.h)(0x6025237E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x6495CCCA)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x6495CCCA)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x6495CCCA)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x6495CCCA)
+I (../Drivers/CMSIS/Device/ST/STM32F7xx/Include/system_stm32f7xx.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x6495CDDD)
+I (F:\Program_Files\KEIL5\ARM\ARMCC\include\stddef.h)(0x6025237E)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc_ex.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_exti.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_gpio.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_gpio_ex.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_dma.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_dma_ex.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_flash.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_flash_ex.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_sram.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_fmc.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_sdram.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c_ex.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_qspi.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h)(0x6495CDDD)
+I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h)(0x6495CDDD)
+I (../Core/Inc/tim.h)(0x64CCE949)
 F (F:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Lib\ARM\arm_cortexM7lfdp_math.lib)(0x5B2C6E9C)()

@@ -22,7 +22,7 @@ Dialog DLL:      TCM.DLL V1.53.0.0
  
 <h2>Project:</h2>
 F:\Program_Data\STM32F767_Projects\AD7606C\MDK-ARM\AD7606C.uvprojx
-Project File Date:  08/04/2023
+Project File Date:  08/20/2023
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'F:\Program_Files\KEIL5\ARM\ARMCC\Bin'
@@ -32,17 +32,17 @@ compiling main.c...
   	
 ..\HARDWARE\W25Q256\W25Q256.h(47): warning:  #1-D: last line of file ends without a newline
   #endif //TSMS_W25Q256_H
-../Core/Src/main.c(535): warning:  #940-D: missing return statement at end of non-void function "OY_FindMaxMin" 
-  }
-../Core/Src/main.c(604): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+../Core/Src/main.c(590): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   						AD_AVEM4[i][j] += AD_Vpp[i][j]/5.;
-../Core/Src/main.c(695): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+../Core/Src/main.c(683): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   						AD_AVEM4[i][j] += AD_Vpp[i][j]/5.;
-../Core/Src/main.c(1100): warning:  #188-D: enumerated type mixed with another type
+../Core/Src/main.c(725): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  				sprintf((char*)buf1,"t0.txt=\"(%.3fmm,%.3fmm)\"",(float)rand1[set_rand] + (float)(letter-13)*12.5 ,(float)rand2[set_rand] + (float)(num-13)*(-12.5));
+../Core/Src/main.c(1108): warning:  #188-D: enumerated type mixed with another type
   	oystate = 100;
 ../Core/Src/main.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=46772 RO-data=68740 RW-data=148 ZI-data=259572  
+Program Size: Code=46352 RO-data=68740 RW-data=1304 ZI-data=259568  
 FromELF: creating hex file...
 "AD7606C\AD7606C.axf" - 0 Error(s), 6 Warning(s).
 

@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "user_function.h": "c"
+        "user_function.h": "c",
+        "fft_user.h": "c"
     }
 }

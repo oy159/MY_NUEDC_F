@@ -39,6 +39,9 @@
 
 
 uint16_t AD7606C_Init(uint16_t* p, uint16_t Range, uint16_t Bandwidth, uint16_t OverSamp);
+void	AD7606C_BitToFloat(uint16_t *p1, float **p2, uint16_t len);
+void	AD7606C_SAMP_Start(uint16_t *data, uint16_t len);
+
 
 
 //  以下为用户自行配置
@@ -47,6 +50,9 @@ uint16_t AD7606C_Init(uint16_t* p, uint16_t Range, uint16_t Bandwidth, uint16_t 
 #define AD7606C_ADDR ((uint32_t)0x6C000000)
 
 
+extern	uint8_t	sampflag;
+extern	uint16_t *p;
+extern 	uint8_t AD7606C_flag;     //  AD采集完成标志
 
 
 #endif /* __AD7606C_H */

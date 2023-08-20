@@ -41,6 +41,7 @@
 "ad7606c\correlation.o"
 "ad7606c\fft_user.o"
 "ad7606c\windows_user.o"
+"ad7606c\appuser.o"
 "F:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\Lib\ARM\arm_cortexM7lfdp_math.lib"
 --library_type=microlib --strict --scatter "AD7606C\AD7606C.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols

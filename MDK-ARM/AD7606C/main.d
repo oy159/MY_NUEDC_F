@@ -59,3 +59,5 @@ ad7606c\main.o: ..\USER\Inc\correlation.h
 ad7606c\main.o: ..\USER\Inc\diagram1.h
 ad7606c\main.o: ..\HARDWARE\W9825G6KH\W9825G6KH.h
 ad7606c\main.o: ..\HARDWARE\W25Q256\W25Q256.h
+ad7606c\main.o: F:\Program_Files\KEIL5\ARM\ARMCC\Bin\..\include\stdlib.h
+ad7606c\main.o: ..\USER\Inc\Appuser.h
