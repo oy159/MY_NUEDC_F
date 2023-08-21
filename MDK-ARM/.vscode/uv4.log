@@ -1,26 +1,17 @@
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'F:\Program_Files\KEIL5\ARM\ARMCC\Bin'
 Build target 'AD7606C'
-compiling main.c...
+compiling Appuser.c...
+../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f767xx.h(181): warning:  #47-D: incompatible redefinition of macro "__FPU_PRESENT" 
+  #define __FPU_PRESENT             1U       /*!< FPU present                                   */
 ..\USER\Inc\diagram1.h(315): warning:  #1-D: last line of file ends without a newline
   	
-..\HARDWARE\W25Q256\W25Q256.h(47): warning:  #1-D: last line of file ends without a newline
-  #endif //TSMS_W25Q256_H
-../Core/Src/main.c(572): warning:  #223-D: function "AD7606C_MEASURE" declared implicitly
-  				AD7606C_MEASURE();
-../Core/Src/main.c(588): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  						AD_AVEM4[i][j] += AD_Vpp[i][j]/5.;
-../Core/Src/main.c(679): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  						AD_AVEM4[i][j] += AD_Vpp[i][j]/5.;
-../Core/Src/main.c(721): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  				sprintf((char*)buf1,"t0.txt=\"(%.3fmm,%.3fmm)\"",(float)rand1[set_rand] + (float)(letter-13)*12.5 ,(float)rand2[set_rand] + (float)(num-13)*(-12.5));
-../Core/Src/main.c(1101): warning:  #188-D: enumerated type mixed with another type
+..\USER\Src\Appuser.c: 2 warnings, 0 errors
+compiling main.c...
+../Core/Src/main.c(690): warning:  #188-D: enumerated type mixed with another type
   	oystate = 100;
-../Core/Src/main.c: 7 warnings, 0 errors
+../Core/Src/main.c: 1 warning, 0 errors
 linking...
-AD7606C\AD7606C.axf: Error: L6218E: Undefined symbol AD7606C_MEASURE (referred from main.o).
-Not enough information to list image symbols.
-Not enough information to list load addresses in the image map.
-Finished: 2 information, 0 warning and 1 error messages.
-"AD7606C\AD7606C.axf" - 1 Error(s), 7 Warning(s).
-Target not created.
-Build Time Elapsed:  00:00:04
+Program Size: Code=43668 RO-data=67960 RW-data=1348 ZI-data=259572  
+FromELF: creating hex file...
+"AD7606C\AD7606C.axf" - 0 Error(s), 3 Warning(s).
+Build Time Elapsed:  00:00:03

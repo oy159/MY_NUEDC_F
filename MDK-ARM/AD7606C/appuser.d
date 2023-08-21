@@ -48,3 +48,10 @@ ad7606c\appuser.o: ..\USER\User_function.h
 ad7606c\appuser.o: ../Core/Inc/usart.h
 ad7606c\appuser.o: F:\Program_Files\KEIL5\ARM\ARMCC\Bin\..\include\stdio.h
 ad7606c\appuser.o: ..\HARDWARE\W25Q256\W25Q256.h
+ad7606c\appuser.o: ..\USER\Inc\fft_user.h
+ad7606c\appuser.o: F:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include\arm_math.h
+ad7606c\appuser.o: ../Drivers/CMSIS/Include/core_cm7.h
+ad7606c\appuser.o: F:\Program_Files\KEIL5\ARM\ARMCC\Bin\..\include\string.h
+ad7606c\appuser.o: F:\Program_Files\KEIL5\ARM\ARMCC\Bin\..\include\math.h
+ad7606c\appuser.o: F:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include\arm_const_structs.h
+ad7606c\appuser.o: F:\Program_Files\KEIL5\ARM\CMSIS\5.4.0\CMSIS\DSP\Include\arm_common_tables.h

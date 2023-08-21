@@ -56,7 +56,12 @@ void	AD7606C_BitToFloat(uint16_t *p1, float **p2, uint16_t len)
 		for(int i = 0; i<4; i++)
 		{
 				for(int j = 0; j < len; j++)
-						p2[i][j] = (float)((int)(p1[i])) / 32767.f * 10.f;
+				{
+					if(p1[j*8+i]>=32768)
+						p2[i][j] = (float)p1[j*8+i]/65535*20-20;
+					else
+						p2[i][j] = (float)p1[j*8+i]/65535*20;	
+				}
 		}
 }
 
@@ -64,7 +69,7 @@ void	AD7606C_BitToFloat(uint16_t *p1, float **p2, uint16_t len)
 
 void	AD7606C_SAMP_Start(uint16_t *data, uint16_t len)
 {
-	uint16_t cnt;
+	uint16_t cnt = 0;
 	sampflag = 0;
   HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_1);
   HAL_TIM_Base_Start(&htim4);
